@@ -18,5 +18,11 @@
     <ClCompile Include="Intalnire21februarie.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Laborator 01.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Laborator02.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
