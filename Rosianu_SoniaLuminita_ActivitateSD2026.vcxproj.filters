@@ -24,5 +24,8 @@
     <ClCompile Include="Laborator02.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Task1_Restaurant.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
