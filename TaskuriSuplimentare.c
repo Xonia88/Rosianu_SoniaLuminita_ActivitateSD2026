@@ -1,0 +1,231 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Restaurant Restaurant;
+
+struct Restaurant {
+	int id;
+	char* nume;
+	int nrProduse;
+	float* preturi;
+};
+
+Restaurant initializareRestaurant(int id, const char* nume, int nrProduse, float* preturi) {
+	Restaurant r;
+	r.id = id;
+
+	r.nume = (char*)malloc(strlen(nume) + 1);
+	strcpy(r.nume, nume);
+
+	r.nrProduse = nrProduse;
+
+	r.preturi = (float*)malloc(sizeof(float) * nrProduse);
+	for (int i = 0; i < nrProduse; i++) {
+		r.preturi[i] = preturi[i];
+	}
+
+	return r;
+}
+
+Restaurant citireRestaurant() {
+	Restaurant r;
+
+	printf("Id: ");
+	scanf("%d", &r.id);
+
+	char buffer[100];
+	printf("Nume: ");
+	scanf("%s", buffer);
+
+	r.nume = (char*)malloc(strlen(buffer) + 1);
+	strcpy(r.nume, buffer);
+
+	printf("Numar produse: ");
+	scanf("%d", &r.nrProduse);
+
+	r.preturi = (float*)malloc(sizeof(float) * r.nrProduse);
+	for (int i = 0; i < r.nrProduse; i++) {
+		printf("Pret %d: ", i + 1);
+		scanf("%f", &r.preturi[i]);
+	}
+
+	return r;
+}
+
+void afisareRestaurant(Restaurant r) {
+	printf("\nId: %d", r.id);
+	printf("\nNume: %s", r.nume);
+	printf("\nNr produse: %d", r.nrProduse);
+
+	printf("\nPreturi: ");
+	for (int i = 0; i < r.nrProduse; i++) {
+		printf("%.2f ", r.preturi[i]);
+	}
+	printf("\n");
+}
+
+float calculMedie(Restaurant r) {
+	float suma = 0;
+	for (int i = 0; i < r.nrProduse; i++) {
+		suma += r.preturi[i];
+	}
+	if (r.nrProduse > 0) {
+		return suma / r.nrProduse;
+	}
+	return 0;
+}
+
+void modificaNume(Restaurant* r, const char* numeNou) {
+	free(r->nume);
+	r->nume = (char*)malloc(strlen(numeNou) + 1);
+	strcpy(r->nume, numeNou);
+}
+
+void dezalocare(Restaurant* r) {
+	free(r->nume);
+	free(r->preturi);
+}
+
+void afisareVector(Restaurant* vector, int nrElemente) {
+	for (int i = 0; i < nrElemente; i++) {
+		afisareRestaurant(vector[i]);
+	}
+}
+Restaurant copiazaRestaurant(Restaurant r) {
+	return initializareRestaurant(r.id, r.nume, r.nrProduse, r.preturi);
+}
+
+void copiazaRestaurante(Restaurant* vector, int nrElemente, int prag, Restaurant** vectorNou, int* dimNou) {
+	*dimNou = 0;
+
+	for (int i = 0; i < nrElemente; i++) {
+		if (vector[i].nrProduse > prag) {
+			(*dimNou)++;
+		}
+	}
+
+	*vectorNou = (Restaurant*)malloc(sizeof(Restaurant) * (*dimNou));
+
+	*dimNou = 0;
+
+	for (int i = 0; i < nrElemente; i++) {
+		if (vector[i].nrProduse > prag) {
+			(*vectorNou)[*dimNou] = copiazaRestaurant(vector[i]);
+			(*dimNou)++;
+		}
+	}
+}
+void mutaRestaurante(Restaurant** vector, int* nrElemente, float prag, Restaurant** vectorNou, int* dimNou) {
+	*dimNou = 0;
+
+	for (int i = 0; i < *nrElemente; i++) {
+		if ((*vector)[i].preturi[0] > prag) {
+			(*dimNou)++;
+		}
+	}
+
+	*vectorNou = (Restaurant*)malloc(sizeof(Restaurant) * (*dimNou));
+
+	int k = 0;
+	for (int i = 0; i < *nrElemente; i++) {
+		if ((*vector)[i].preturi[0] > prag) {
+			(*vectorNou)[k++] = copiazaRestaurant((*vector)[i]);
+		}
+	}
+}
+
+Restaurant* concateneazaVectori(Restaurant* v1, int n1, Restaurant* v2, int n2, int* dimNou) {
+	*dimNou = n1 + n2;
+
+	Restaurant* rezultat = (Restaurant*)malloc(sizeof(Restaurant) * (*dimNou));
+
+	for (int i = 0; i < n1; i++) {
+		rezultat[i] = copiazaRestaurant(v1[i]);
+	}
+
+	for (int i = 0; i < n2; i++) {
+		rezultat[n1 + i] = copiazaRestaurant(v2[i]);
+	}
+
+	return rezultat;
+}
+
+void dezalocareVector(Restaurant** vector, int* nrElemente) {
+	for (int i = 0; i < *nrElemente; i++) {
+		dezalocare(&(*vector)[i]);
+	}
+	free(*vector);
+	*vector = NULL;
+	*nrElemente = 0;
+}
+
+int main() {
+
+	float preturi[] = { 25.5, 30.0, 15.75 };
+
+	Restaurant r = initializareRestaurant(1, "Urban", 3, preturi);
+
+	afisareRestaurant(r);
+
+	printf("\nMedie: %.2f\n", calculMedie(r));
+
+	modificaNume(&r, "Central");
+
+	printf("\nDupa modificare:\n");
+	afisareRestaurant(r);
+
+	dezalocare(&r);
+
+
+	int nr = 5;
+	Restaurant* vector = (Restaurant*)malloc(sizeof(Restaurant) * nr);
+
+	float p1[] = { 10,20 };
+	float p2[] = { 15,25,35 };
+	float p3[] = { 12 };
+	float p4[] = { 50,60 };
+	float p5[] = { 5,7,9 };
+
+	vector[0] = initializareRestaurant(1, "A", 2, p1);
+	vector[1] = initializareRestaurant(2, "B", 3, p2);
+	vector[2] = initializareRestaurant(3, "C", 1, p3);
+	vector[3] = initializareRestaurant(4, "D", 2, p4);
+	vector[4] = initializareRestaurant(5, "E", 3, p5);
+
+	printf("\nVector initial:\n");
+	afisareVector(vector, nr);
+
+	Restaurant* filtrat = NULL;
+	int dimFiltrat = 0;
+
+	copiazaRestaurante(vector, nr, 2, &filtrat, &dimFiltrat);
+
+	printf("\nVector copiat:\n");
+	afisareVector(filtrat, dimFiltrat);
+
+
+	Restaurant* mutat = NULL;
+	int dimMutat = 0;
+
+	mutaRestaurante(&vector, &nr, 10, &mutat, &dimMutat);
+
+	printf("\nVector mutat:\n");
+	afisareVector(mutat, dimMutat);
+
+
+	int dimConcat = 0;
+	Restaurant* concatenat = concateneazaVectori(vector, nr, filtrat, dimFiltrat, &dimConcat);
+
+	printf("\nVector concatenat:\n");
+	afisareVector(concatenat, dimConcat);
+
+
+	dezalocareVector(&filtrat, &dimFiltrat);
+	dezalocareVector(&mutat, &dimMutat);
+	dezalocareVector(&concatenat, &dimConcat);
+	dezalocareVector(&vector, &nr);
+
+	return 0;
+}
