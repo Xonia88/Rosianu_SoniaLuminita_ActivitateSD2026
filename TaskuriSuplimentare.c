@@ -161,6 +161,87 @@ void dezalocareVector(Restaurant** vector, int* nrElemente) {
 	*nrElemente = 0;
 }
 
+Restaurant citireRestaurantDinFisier(FILE* f) {
+	char buffer[200];
+	char sep[3] = ",\n";
+
+	if (fgets(buffer, 200, f) == NULL) {
+		Restaurant r;
+		r.id = -1;
+		r.nume = NULL;
+		r.nrProduse = 0;
+		r.preturi = NULL;
+		return r;
+	}
+
+	char* token;
+	Restaurant r;
+
+	token = strtok(buffer, sep);
+	r.id = atoi(token);
+
+	token = strtok(NULL, sep);
+	r.nume = (char*)malloc(strlen(token) + 1);
+	strcpy(r.nume, token);
+
+	token = strtok(NULL, sep);
+	r.nrProduse = atoi(token);
+
+	r.preturi = (float*)malloc(sizeof(float) * r.nrProduse);
+
+	for (int i = 0; i < r.nrProduse; i++) {
+		token = strtok(NULL, sep);
+		r.preturi[i] = atof(token);
+	}
+
+	return r;
+}
+
+Restaurant* citireVectorDinFisier(const char* numeFisier, int* nrElemente) {
+	FILE* f = fopen(numeFisier, "r");
+
+	Restaurant* vector = NULL;
+	*nrElemente = 0;
+
+	while (1) {
+		Restaurant r = citireRestaurantDinFisier(f);
+
+		if (r.id == -1) {
+			break;
+		}
+
+		vector = (Restaurant*)realloc(vector, sizeof(Restaurant) * ((*nrElemente) + 1));
+		vector[*nrElemente] = r;
+		(*nrElemente)++;
+	}
+
+	fclose(f);
+	return vector;
+}
+
+void scrieRestaurantInFisier(FILE* f, Restaurant r) {
+	fprintf(f, "%d,%s,%d,", r.id, r.nume, r.nrProduse);
+
+	for (int i = 0; i < r.nrProduse; i++) {
+		fprintf(f, "%.2f", r.preturi[i]);
+		if (i < r.nrProduse - 1) {
+			fprintf(f, ",");
+		}
+	}
+
+	fprintf(f, "\n");
+}
+
+void scrieVectorInFisier(const char* numeFisier, Restaurant* vector, int nrElemente) {
+	FILE* f = fopen(numeFisier, "w");
+
+	for (int i = 0; i < nrElemente; i++) {
+		scrieRestaurantInFisier(f, vector[i]);
+	}
+
+	fclose(f);
+}
+
 int main() {
 
 	float preturi[] = { 25.5, 30.0, 15.75 };
@@ -226,6 +307,18 @@ int main() {
 	dezalocareVector(&mutat, &dimMutat);
 	dezalocareVector(&concatenat, &dimConcat);
 	dezalocareVector(&vector, &nr);
+
+
+
+	int nrFisier = 0;
+	Restaurant* dinFisier = citireVectorDinFisier("restaurante.txt", &nrFisier);
+
+	printf("\nVector din fisier:\n");
+	afisareVector(dinFisier, nrFisier);
+
+	scrieVectorInFisier("output.txt", dinFisier, nrFisier);
+
+	dezalocareVector(&dinFisier, &nrFisier);
 
 	return 0;
 }
