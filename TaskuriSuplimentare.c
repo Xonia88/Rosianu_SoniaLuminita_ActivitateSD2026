@@ -242,6 +242,82 @@ void scrieVectorInFisier(const char* numeFisier, Restaurant* vector, int nrEleme
 	fclose(f);
 }
 
+Restaurant** creeazaMatrice(Restaurant* vector, int nrElemente, int* nrLinii, int** dimLinii) {
+
+	*nrLinii = 0;
+
+	for (int i = 0; i < nrElemente; i++) {
+		if (vector[i].nrProduse > *nrLinii) {
+			*nrLinii = vector[i].nrProduse;
+		}
+	}
+
+	Restaurant** matrice = (Restaurant**)malloc(sizeof(Restaurant*) * (*nrLinii));
+	*dimLinii = (int*)malloc(sizeof(int) * (*nrLinii));
+
+	for (int i = 0; i < *nrLinii; i++) {
+		matrice[i] = NULL;
+		(*dimLinii)[i] = 0;
+	}
+
+	for (int i = 0; i < nrElemente; i++) {
+		int linie = vector[i].nrProduse - 1;
+
+		matrice[linie] = (Restaurant*)realloc(matrice[linie],
+			sizeof(Restaurant) * ((*dimLinii)[linie] + 1));
+
+		matrice[linie][(*dimLinii)[linie]] = copiazaRestaurant(vector[i]);
+		(*dimLinii)[linie]++;
+	}
+
+	return matrice;
+}
+
+void afisareMatrice(Restaurant** matrice, int nrLinii, int* dimLinii) {
+	for (int i = 0; i < nrLinii; i++) {
+		printf("\nLinia %d:\n", i);
+		for (int j = 0; j < dimLinii[i]; j++) {
+			afisareRestaurant(matrice[i][j]);
+		}
+	}
+}
+
+
+void sorteazaMatrice(Restaurant** matrice, int nrLinii, int* dimLinii) {
+	for (int i = 0; i < nrLinii - 1; i++) {
+		for (int j = i + 1; j < nrLinii; j++) {
+			if (dimLinii[i] > dimLinii[j]) {
+
+				int tempDim = dimLinii[i];
+				dimLinii[i] = dimLinii[j];
+				dimLinii[j] = tempDim;
+
+				Restaurant* temp = matrice[i];
+				matrice[i] = matrice[j];
+				matrice[j] = temp;
+			}
+		}
+	}
+}
+
+void dezalocareMatrice(Restaurant*** matrice, int* nrLinii, int** dimLinii) {
+	for (int i = 0; i < *nrLinii; i++) {
+		for (int j = 0; j < (*dimLinii)[i]; j++) {
+			dezalocare(&(*matrice)[i][j]);
+		}
+		free((*matrice)[i]);
+	}
+
+	free(*matrice);
+	free(*dimLinii);
+
+	*matrice = NULL;
+	*dimLinii = NULL;
+	*nrLinii = 0;
+}
+
+
+
 int main() {
 
 	float preturi[] = { 25.5, 30.0, 15.75 };
@@ -306,8 +382,7 @@ int main() {
 	dezalocareVector(&filtrat, &dimFiltrat);
 	dezalocareVector(&mutat, &dimMutat);
 	dezalocareVector(&concatenat, &dimConcat);
-	dezalocareVector(&vector, &nr);
-
+	
 
 
 	int nrFisier = 0;
@@ -319,6 +394,26 @@ int main() {
 	scrieVectorInFisier("output.txt", dinFisier, nrFisier);
 
 	dezalocareVector(&dinFisier, &nrFisier);
+
+
+	int nrLinii = 0;
+	int* dimLinii = NULL;
+
+	Restaurant** matrice = creeazaMatrice(vector, nr, &nrLinii, &dimLinii);
+
+	printf("\nMatrice initiala:\n");
+	afisareMatrice(matrice, nrLinii, dimLinii);
+
+	sorteazaMatrice(matrice, nrLinii, dimLinii);
+
+	printf("\nMatrice sortata:\n");
+	afisareMatrice(matrice, nrLinii, dimLinii);
+
+	dezalocareMatrice(&matrice, &nrLinii, &dimLinii);
+
+
+	dezalocareVector(&vector, &nr);
+
 
 	return 0;
 }
