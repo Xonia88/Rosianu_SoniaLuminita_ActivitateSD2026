@@ -316,7 +316,44 @@ void dezalocareMatrice(Restaurant*** matrice, int* nrLinii, int** dimLinii) {
 	*nrLinii = 0;
 }
 
+typedef struct Nod {
+	Restaurant info;
+	struct Nod* next;
+} Nod;
 
+Nod* inserareFinal(Nod* cap, Restaurant r) {
+	Nod* nou = (Nod*)malloc(sizeof(Nod));
+	nou->info = copiazaRestaurant(r);
+	nou->next = NULL;
+
+	if (cap == NULL) {
+		return nou;
+	}
+
+	Nod* temp = cap;
+	while (temp->next != NULL) {
+		temp = temp->next;
+	}
+	temp->next = nou;
+
+	return cap;
+}
+
+void afisareLista(Nod* cap) {
+	while (cap != NULL) {
+		afisareRestaurant(cap->info);
+		cap = cap->next;
+	}
+}
+
+void dezalocareLista(Nod** cap) {
+	while (*cap != NULL) {
+		Nod* temp = *cap;
+		*cap = (*cap)->next;
+		dezalocare(&temp->info);
+		free(temp);
+	}
+}
 
 int main() {
 
@@ -411,6 +448,22 @@ int main() {
 
 	dezalocareMatrice(&matrice, &nrLinii, &dimLinii);
 
+
+	
+
+
+
+
+	Nod* lista = NULL;
+
+	for (int i = 0; i < nr; i++) {
+		lista = inserareFinal(lista, vector[i]);
+	}
+
+	printf("\nLista:\n");
+	afisareLista(lista);
+
+	dezalocareLista(&lista);
 
 	dezalocareVector(&vector, &nr);
 
