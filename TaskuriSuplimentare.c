@@ -354,6 +354,62 @@ void dezalocareLista(Nod** cap) {
 		free(temp);
 	}
 }
+typedef struct NodDublu {
+	Restaurant info;
+	struct NodDublu* next;
+	struct NodDublu* prev;
+} NodDublu;
+
+NodDublu* inserareFinalDublu(NodDublu* cap, Restaurant r) {
+	NodDublu* nou = (NodDublu*)malloc(sizeof(NodDublu));
+	nou->info = copiazaRestaurant(r);
+	nou->next = NULL;
+	nou->prev = NULL;
+
+	if (cap == NULL) {
+		return nou;
+	}
+
+	NodDublu* temp = cap;
+	while (temp->next != NULL) {
+		temp = temp->next;
+	}
+
+	temp->next = nou;
+	nou->prev = temp;
+
+	return cap;
+}
+
+void afisareListaDubla(NodDublu* cap) {
+	while (cap != NULL) {
+		afisareRestaurant(cap->info);
+		cap = cap->next;
+	}
+}
+
+void afisareListaDublaInvers(NodDublu* cap) {
+	if (cap == NULL) return;
+
+	while (cap->next != NULL) {
+		cap = cap->next;
+	}
+
+	while (cap != NULL) {
+		afisareRestaurant(cap->info);
+		cap = cap->prev;
+	}
+}
+
+void dezalocareListaDubla(NodDublu** cap) {
+	while (*cap != NULL) {
+		NodDublu* temp = *cap;
+		*cap = (*cap)->next;
+		dezalocare(&temp->info);
+		free(temp);
+	}
+}
+
 
 int main() {
 
@@ -464,6 +520,21 @@ int main() {
 	afisareLista(lista);
 
 	dezalocareLista(&lista);
+
+	NodDublu* listaD = NULL;
+
+	for (int i = 0; i < nr; i++) {
+		listaD = inserareFinalDublu(listaD, vector[i]);
+	}
+
+	printf("\nLista dubla:\n");
+	afisareListaDubla(listaD);
+
+	printf("\nLista dubla invers:\n");
+	afisareListaDublaInvers(listaD);
+
+	dezalocareListaDubla(&listaD);
+
 
 	dezalocareVector(&vector, &nr);
 
