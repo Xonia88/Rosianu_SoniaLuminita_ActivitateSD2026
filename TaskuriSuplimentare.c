@@ -409,6 +409,103 @@ void dezalocareListaDubla(NodDublu** cap) {
 		free(temp);
 	}
 }
+NodDublu* stergePozitieDublu(NodDublu* cap, int poz) {
+	if (cap == NULL) return NULL;
+
+	NodDublu* temp = cap;
+	int index = 0;
+
+	while (temp != NULL && index < poz) {
+		temp = temp->next;
+		index++;
+	}
+
+	if (temp == NULL) return cap;
+
+	if (temp->prev == NULL) { // primul
+		cap = temp->next;
+		if (cap) cap->prev = NULL;
+	}
+	else {
+		temp->prev->next = temp->next;
+		if (temp->next) {
+			temp->next->prev = temp->prev;
+		}
+	}
+
+	dezalocare(&temp->info);
+	free(temp);
+
+	return cap;
+}
+
+NodDublu* inserareSortataDublu(NodDublu* cap, Restaurant r) {
+	NodDublu* nou = (NodDublu*)malloc(sizeof(NodDublu));
+	nou->info = copiazaRestaurant(r);
+	nou->next = NULL;
+	nou->prev = NULL;
+
+	if (cap == NULL || r.id < cap->info.id) {
+		nou->next = cap;
+		if (cap) cap->prev = nou;
+		return nou;
+	}
+
+	NodDublu* temp = cap;
+
+	while (temp->next != NULL && temp->next->info.id < r.id) {
+		temp = temp->next;
+	}
+
+	nou->next = temp->next;
+	nou->prev = temp;
+
+	if (temp->next) {
+		temp->next->prev = nou;
+	}
+
+	temp->next = nou;
+
+	return cap;
+}
+
+Nod* salvareInListaSimpla(NodDublu* cap, int prag) {
+	Nod* lista = NULL;
+
+	while (cap != NULL) {
+		if (cap->info.nrProduse > prag) {
+			lista = inserareFinal(lista, cap->info);
+		}
+		cap = cap->next;
+	}
+
+	return lista;
+}
+
+
+void swapPozitiiDublu(NodDublu* cap, int p1, int p2) {
+	if (p1 == p2) return;
+
+	NodDublu* n1 = NULL;
+	NodDublu* n2 = NULL;
+
+	int index = 0;
+
+	while (cap != NULL) {
+		if (index == p1) n1 = cap;
+		if (index == p2) n2 = cap;
+		cap = cap->next;
+		index++;
+	}
+
+	if (n1 && n2) {
+		Restaurant temp = n1->info;
+		n1->info = n2->info;
+		n2->info = temp;
+	}
+}
+
+
 
 
 int main() {
@@ -532,6 +629,26 @@ int main() {
 
 	printf("\nLista dubla invers:\n");
 	afisareListaDublaInvers(listaD);
+
+	printf("\nStergere pozitie 2:\n");
+	listaD = stergePozitieDublu(listaD, 2);
+	afisareListaDubla(listaD);
+
+	printf("\nInserare sortata:\n");
+	Restaurant nou = initializareRestaurant(6, "Z", 2, p1);
+	listaD = inserareSortataDublu(listaD, nou);
+	afisareListaDubla(listaD);
+	dezalocare(&nou);
+
+	printf("\nSwap pozitii 0 si 2:\n");
+	swapPozitiiDublu(listaD, 0, 2);
+	afisareListaDubla(listaD);
+
+	printf("\nLista simpla din dubla:\n");
+	Nod* listaSimpla = salvareInListaSimpla(listaD, 2);
+	afisareLista(listaSimpla);
+	dezalocareLista(&listaSimpla);
+
 
 	dezalocareListaDubla(&listaD);
 
