@@ -505,7 +505,64 @@ void swapPozitiiDublu(NodDublu* cap, int p1, int p2) {
 	}
 }
 
+typedef struct Cladire {
+	int id;
+	int anConstructie;
+	char* adresa;
+	float suprafata;
+} Cladire;
 
+typedef struct NodHash {
+	Cladire info;
+	struct NodHash* next;
+} NodHash;
+
+typedef struct HashTable {
+	NodHash** vector;
+	int dim;
+} HashTable;
+
+
+int functieHash(HashTable tabela, int an) {
+	return an % tabela.dim;
+}
+
+void inserareHash(HashTable tabela, Cladire c) {
+	int poz = functieHash(tabela, c.anConstructie);
+
+	NodHash* nou = (NodHash*)malloc(sizeof(NodHash));
+	nou->info = c;
+	nou->next = tabela.vector[poz];
+
+	tabela.vector[poz] = nou;
+}
+
+void afisareCluster(HashTable tabela, int an) {
+	int poz = functieHash(tabela, an);
+
+	NodHash* temp = tabela.vector[poz];
+
+	while (temp != NULL) {
+		if (temp->info.anConstructie == an) {
+			printf("\nId: %d", temp->info.id);
+			printf("\nAn: %d", temp->info.anConstructie);
+			printf("\nAdresa: %s", temp->info.adresa);
+			printf("\nSuprafata: %.2f\n", temp->info.suprafata);
+		}
+		temp = temp->next;
+	}
+}
+HashTable initializareHash(int dim) {
+	HashTable tabela;
+	tabela.dim = dim;
+	tabela.vector = (NodHash**)malloc(sizeof(NodHash*) * dim);
+
+	for (int i = 0; i < dim; i++) {
+		tabela.vector[i] = NULL;
+	}
+
+	return tabela;
+}
 
 
 int main() {
@@ -654,6 +711,20 @@ int main() {
 
 
 	dezalocareVector(&vector, &nr);
+
+	HashTable tabela = initializareHash(5);
+
+	Cladire c1 = { 1, 1990, "A", 50 };
+	Cladire c2 = { 2, 1980, "B", 70 };
+	Cladire c3 = { 3, 1990, "C", 60 };
+
+	inserareHash(tabela, c1);
+	inserareHash(tabela, c2);
+	inserareHash(tabela, c3);
+
+	printf("\nCluster 1990:\n");
+	afisareCluster(tabela, 1990);
+
 
 
 	return 0;
