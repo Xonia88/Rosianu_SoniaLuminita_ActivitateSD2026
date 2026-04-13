@@ -565,6 +565,121 @@ HashTable initializareHash(int dim) {
 }
 
 
+void stergeCladire(HashTable tabela, int id, int an) {
+	int poz = functieHash(tabela, an);
+
+	NodHash* temp = tabela.vector[poz];
+	NodHash* prev = NULL;
+
+	while (temp != NULL) {
+		if (temp->info.id == id && temp->info.anConstructie == an) {
+
+			if (prev == NULL) {
+				tabela.vector[poz] = temp->next;
+			}
+			else {
+				prev->next = temp->next;
+			}
+
+			free(temp);
+			return;
+		}
+
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+void stergeCladireDupaId(HashTable tabela, int id) {
+	for (int i = 0; i < tabela.dim; i++) {
+
+		NodHash* temp = tabela.vector[i];
+		NodHash* prev = NULL;
+
+		while (temp != NULL) {
+			if (temp->info.id == id) {
+
+				if (prev == NULL) {
+					tabela.vector[i] = temp->next;
+				}
+				else {
+					prev->next = temp->next;
+				}
+
+				free(temp);
+				return;
+			}
+
+			prev = temp;
+			temp = temp->next;
+		}
+	}
+}
+
+
+Cladire* salvareInVector(HashTable tabela, int an, int* dim) {
+	*dim = 0;
+
+	int poz = functieHash(tabela, an);
+	NodHash* temp = tabela.vector[poz];
+
+	while (temp != NULL) {
+		if (temp->info.anConstructie == an) {
+			(*dim)++;
+		}
+		temp = temp->next;
+	}
+
+	Cladire* vector = (Cladire*)malloc(sizeof(Cladire) * (*dim));
+
+	int k = 0;
+	temp = tabela.vector[poz];
+
+	while (temp != NULL) {
+		if (temp->info.anConstructie == an) {
+			vector[k++] = temp->info;
+		}
+		temp = temp->next;
+	}
+
+	return vector;
+}
+
+
+
+void modificaAn(HashTable tabela, int id, int anVechi, int anNou) {
+	int poz = functieHash(tabela, anVechi);
+
+	NodHash* temp = tabela.vector[poz];
+	NodHash* prev = NULL;
+
+	while (temp != NULL) {
+		if (temp->info.id == id) {
+
+			Cladire c = temp->info;
+
+			if (prev == NULL) {
+				tabela.vector[poz] = temp->next;
+			}
+			else {
+				prev->next = temp->next;
+			}
+
+			free(temp);
+
+			c.anConstructie = anNou;
+			inserareHash(tabela, c);
+
+			return;
+		}
+
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+
+
 int main() {
 
 	float preturi[] = { 25.5, 30.0, 15.75 };
@@ -725,7 +840,30 @@ int main() {
 	printf("\nCluster 1990:\n");
 	afisareCluster(tabela, 1990);
 
+	printf("\nStergere id 1 din 1990:\n");
+	stergeCladire(tabela, 1, 1990);
+	afisareCluster(tabela, 1990);
 
+	printf("\nStergere dupa id 2:\n");
+	stergeCladireDupaId(tabela, 2);
+	afisareCluster(tabela, 1980);
+
+	printf("\nVector din cluster 1990:\n");
+	int dim = 0;
+	Cladire* v = salvareInVector(tabela, 1990, &dim);
+
+	for (int i = 0; i < dim; i++) {
+		printf("\nId: %d", v[i].id);
+		printf("\nAn: %d", v[i].anConstructie);
+		printf("\nAdresa: %s", v[i].adresa);
+		printf("\nSuprafata: %.2f\n", v[i].suprafata);
+	}
+
+	free(v);
+
+	printf("\nModificare an pentru id 3:\n");
+	modificaAn(tabela, 3, 1990, 2000);
+	afisareCluster(tabela, 2000);
 
 	return 0;
 }
