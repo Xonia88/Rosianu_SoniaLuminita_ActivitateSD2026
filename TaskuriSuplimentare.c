@@ -678,6 +678,94 @@ void modificaAn(HashTable tabela, int id, int anVechi, int anNou) {
 	}
 }
 
+typedef struct Pacient {
+	int id;
+	char* nume;
+	int gradUrgenta;
+} Pacient;
+
+
+Pacient initPacient(int id, const char* nume, int grad) {
+	Pacient p;
+	p.id = id;
+	p.gradUrgenta = grad;
+
+	p.nume = (char*)malloc(strlen(nume) + 1);
+	strcpy(p.nume, nume);
+
+	return p;
+}
+
+void afisarePacient(Pacient p) {
+	printf("\nPacient %d - %s - urgenta: %d", p.id, p.nume, p.gradUrgenta);
+}
+
+typedef struct Heap {
+	Pacient* vector;
+	int dim;
+} Heap;
+
+void inserareHeap(Heap* h, Pacient p) {
+	h->vector = (Pacient*)realloc(h->vector, sizeof(Pacient) * (h->dim + 1));
+	h->vector[h->dim] = p;
+	int i = h->dim;
+	h->dim++;
+
+	while (i > 0) {
+		int parinte = (i - 1) / 2;
+		if (h->vector[parinte].gradUrgenta < h->vector[i].gradUrgenta) {
+			Pacient aux = h->vector[parinte];
+			h->vector[parinte] = h->vector[i];
+			h->vector[i] = aux;
+			i = parinte;
+		}
+		else {
+			break;
+		}
+	}
+}
+
+
+
+Pacient extrageMax(Heap* h) {
+	Pacient p = h->vector[0];
+
+	h->vector[0] = h->vector[h->dim - 1];
+	h->dim--;
+
+	int i = 0;
+
+	while (1) {
+		int st = 2 * i + 1;
+		int dr = 2 * i + 2;
+		int max = i;
+
+		if (st < h->dim && h->vector[st].gradUrgenta > h->vector[max].gradUrgenta)
+			max = st;
+
+		if (dr < h->dim && h->vector[dr].gradUrgenta > h->vector[max].gradUrgenta)
+			max = dr;
+
+		if (max != i) {
+			Pacient aux = h->vector[i];
+			h->vector[i] = h->vector[max];
+			h->vector[max] = aux;
+			i = max;
+		}
+		else break;
+	}
+
+	return p;
+}
+
+void dezalocareHeap(Heap* h) {
+	for (int i = 0; i < h->dim; i++) {
+		free(h->vector[i].nume);
+	}
+	free(h->vector);
+	h->vector = NULL;
+	h->dim = 0;
+}
 
 
 int main() {
@@ -864,6 +952,23 @@ int main() {
 	printf("\nModificare an pentru id 3:\n");
 	modificaAn(tabela, 3, 1990, 2000);
 	afisareCluster(tabela, 2000);
+	Heap heap;
+	heap.vector = NULL;
+	heap.dim = 0;
+
+	inserareHeap(&heap, initPacient(1, "Ion", 5));
+	inserareHeap(&heap, initPacient(2, "Ana", 9));
+	inserareHeap(&heap, initPacient(3, "Mihai", 3));
+
+	printf("\nHeap (extragere ordine urgenta):\n");
+
+	while (heap.dim > 0) {
+		Pacient p = extrageMax(&heap);
+		afisarePacient(p);
+		free(p.nume);
+	}
+
+	dezalocareHeap(&heap);
 
 	return 0;
 }
