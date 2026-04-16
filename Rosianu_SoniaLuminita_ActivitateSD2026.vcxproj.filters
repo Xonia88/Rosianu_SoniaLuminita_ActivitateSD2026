@@ -27,6 +27,9 @@
     <ClCompile Include="TaskuriSuplimentare.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rezervare.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />

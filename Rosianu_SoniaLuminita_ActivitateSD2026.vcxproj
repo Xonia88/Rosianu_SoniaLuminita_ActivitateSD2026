@@ -126,6 +126,7 @@
     <ClCompile Include="Intalnire21februarie.c" />
     <ClCompile Include="Laborator 01.c" />
     <ClCompile Include="Laborator02.c" />
+    <ClCompile Include="Rezervare.c" />
     <ClCompile Include="TaskuriSuplimentare.c" />
   </ItemGroup>
   <ItemGroup>
