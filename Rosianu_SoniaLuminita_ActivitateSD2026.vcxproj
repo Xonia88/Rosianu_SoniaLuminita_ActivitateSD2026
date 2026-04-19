@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="angajati_stiva_coada.c" />
     <ClCompile Include="Intalnire21februarie.c" />
     <ClCompile Include="Laborator 01.c" />
     <ClCompile Include="Laborator02.c" />
