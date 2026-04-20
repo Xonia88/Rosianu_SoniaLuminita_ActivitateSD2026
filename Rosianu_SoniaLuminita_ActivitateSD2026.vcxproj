@@ -128,6 +128,7 @@
     <ClCompile Include="Laborator 01.c" />
     <ClCompile Include="Laborator02.c" />
     <ClCompile Include="Rezervare.c" />
+    <ClCompile Include="student_stiva_coada.c" />
     <ClCompile Include="TaskuriSuplimentare.c" />
   </ItemGroup>
   <ItemGroup>

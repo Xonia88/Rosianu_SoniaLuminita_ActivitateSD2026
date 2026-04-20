@@ -33,6 +33,9 @@
     <ClCompile Include="angajati_stiva_coada.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="student_stiva_coada.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
