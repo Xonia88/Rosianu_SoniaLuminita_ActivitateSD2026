@@ -39,6 +39,9 @@
     <ClCompile Include="hashtable_angajati.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hashtable_studenti.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
