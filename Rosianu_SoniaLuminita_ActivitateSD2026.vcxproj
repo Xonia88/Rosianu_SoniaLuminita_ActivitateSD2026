@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="angajati_stiva_coada.c" />
     <ClCompile Include="hashtable_angajati.c" />
+    <ClCompile Include="HashTable_Comenzi.c" />
     <ClCompile Include="hashtable_produse.c" />
     <ClCompile Include="hashtable_studenti.c" />
     <ClCompile Include="Intalnire21februarie.c" />

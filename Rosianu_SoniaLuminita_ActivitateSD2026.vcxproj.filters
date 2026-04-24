@@ -45,6 +45,9 @@
     <ClCompile Include="hashtable_produse.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HashTable_Comenzi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
