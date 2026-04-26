@@ -48,6 +48,9 @@
     <ClCompile Include="HashTable_Comenzi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graf_examen_dfs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
