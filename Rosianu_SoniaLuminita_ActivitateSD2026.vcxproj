@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="angajati_stiva_coada.c" />
     <ClCompile Include="graf_examen_dfs.c" />
+    <ClCompile Include="graf_studenti_dfs.c" />
     <ClCompile Include="hashtable_angajati.c" />
     <ClCompile Include="HashTable_Comenzi.c" />
     <ClCompile Include="hashtable_produse.c" />
