@@ -130,6 +130,7 @@
     <ClCompile Include="HashTable_Comenzi.c" />
     <ClCompile Include="hashtable_produse.c" />
     <ClCompile Include="hashtable_studenti.c" />
+    <ClCompile Include="heap_studenti.c" />
     <ClCompile Include="Intalnire21februarie.c" />
     <ClCompile Include="Laborator 01.c" />
     <ClCompile Include="Laborator02.c" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
+    <Text Include="studenti.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

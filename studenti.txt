@@ -1,0 +1,4 @@
+1,21,8.5,Ana,ASE,A
+2,22,7.2,Ion,Poli,B
+3,20,9.1,Maria,ASE,C
+4,23,6.8,George,UB,D

@@ -54,9 +54,13 @@
     <ClCompile Include="graf_studenti_dfs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="heap_studenti.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
+    <Text Include="studenti.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
