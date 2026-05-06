@@ -57,6 +57,9 @@
     <ClCompile Include="heap_studenti.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbore_studenti.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
