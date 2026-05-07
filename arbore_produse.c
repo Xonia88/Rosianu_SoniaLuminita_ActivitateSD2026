@@ -56,6 +56,13 @@ void adaugaProdusInArbore(Nod** rad, Produs pNou) {
 		}
 	}
 }
+void afisarePreordine(Nod* rad) {
+	if (rad) {
+		afisareProdus(rad->info);
+		afisarePreordine(rad->st);
+		afisarePreordine(rad->dr);
+	}
+}
 int main() {
 
 	Nod* rad = NULL;
@@ -63,6 +70,9 @@ int main() {
 	adaugaProdusInArbore(&rad, initProdus(2, 200, "Mouse", "IT"));
 	adaugaProdusInArbore(&rad, initProdus(1, 3500, "Laptop", "IT"));
 	adaugaProdusInArbore(&rad, initProdus(3, 5000, "Telefon", "Mobile"));
+
+	printf("\nAfisare preordine:\n");
+	afisarePreordine(rad);
 
 	return 0;
 }
