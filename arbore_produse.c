@@ -39,18 +39,30 @@ void afisareProdus(Produs p) {
 	printf("\nCategorie: %s\n", p.categorie);
 }
 
+void adaugaProdusInArbore(Nod** rad, Produs pNou) {
+	if (*rad == NULL) {
+		Nod* nod = (Nod*)malloc(sizeof(Nod));
+		nod->info = pNou;
+		nod->st = NULL;
+		nod->dr = NULL;
+		*rad = nod;
+	}
+	else {
+		if ((*rad)->info.id > pNou.id) {
+			adaugaProdusInArbore(&((*rad)->st), pNou);
+		}
+		if ((*rad)->info.id < pNou.id) {
+			adaugaProdusInArbore(&((*rad)->dr), pNou);
+		}
+	}
+}
 int main() {
 
-	Produs p1 = initProdus(1, 3500, "Laptop", "IT");
-	Produs p2 = initProdus(2, 200, "Mouse", "IT");
+	Nod* rad = NULL;
 
-	afisareProdus(p1);
-	afisareProdus(p2);
-
-	free(p1.nume);
-	free(p1.categorie);
-	free(p2.nume);
-	free(p2.categorie);
+	adaugaProdusInArbore(&rad, initProdus(2, 200, "Mouse", "IT"));
+	adaugaProdusInArbore(&rad, initProdus(1, 3500, "Laptop", "IT"));
+	adaugaProdusInArbore(&rad, initProdus(3, 5000, "Telefon", "Mobile"));
 
 	return 0;
 }
