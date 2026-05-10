@@ -56,6 +56,7 @@ void adaugaProdusInArbore(Nod** rad, Produs pNou) {
 		}
 	}
 }
+
 void afisarePreordine(Nod* rad) {
 	if (rad) {
 		afisareProdus(rad->info);
@@ -63,6 +64,89 @@ void afisarePreordine(Nod* rad) {
 		afisarePreordine(rad->dr);
 	}
 }
+
+Produs getProdusByID(Nod* rad, int id) {
+	Produs p;
+	p.id = -1;
+
+	if (rad) {
+		if (rad->info.id == id) {
+			p = rad->info;
+
+			p.nume = (char*)malloc(strlen(rad->info.nume) + 1);
+			strcpy(p.nume, rad->info.nume);
+
+			p.categorie = (char*)malloc(strlen(rad->info.categorie) + 1);
+			strcpy(p.categorie, rad->info.categorie);
+		}
+
+		if (id < rad->info.id) {
+			p = getProdusByID(rad->st, id);
+		}
+
+		if (id > rad->info.id) {
+			p = getProdusByID(rad->dr, id);
+		}
+	}
+
+	return p;
+}
+
+int determinaNumarNoduri(Nod* rad) {
+	if (rad) {
+		return determinaNumarNoduri(rad->st) +
+			determinaNumarNoduri(rad->dr) + 1;
+	}
+	return 0;
+}
+
+int maxim(int a, int b) {
+	return (a > b ? a : b);
+}
+
+int calculeazaInaltimeArbore(Nod* rad) {
+	if (rad) {
+		return maxim(calculeazaInaltimeArbore(rad->st),
+			calculeazaInaltimeArbore(rad->dr)) + 1;
+	}
+	return 0;
+}
+
+float calculeazaPretTotal(Nod* rad) {
+	if (rad) {
+		return rad->info.pret +
+			calculeazaPretTotal(rad->st) +
+			calculeazaPretTotal(rad->dr);
+	}
+	return 0;
+}
+
+float calculeazaPretCategorie(Nod* rad, const char* categorie) {
+	if (rad) {
+		float suma = calculeazaPretCategorie(rad->st, categorie) +
+			calculeazaPretCategorie(rad->dr, categorie);
+
+		if (strcmp(rad->info.categorie, categorie) == 0) {
+			suma += rad->info.pret;
+		}
+		return suma;
+	}
+	return 0;
+}
+
+void dezalocareArbore(Nod** rad) {
+	if (*rad) {
+		dezalocareArbore(&(*rad)->st);
+		dezalocareArbore(&(*rad)->dr);
+
+		free((*rad)->info.nume);
+		free((*rad)->info.categorie);
+
+		free(*rad);
+		*rad = NULL;
+	}
+}
+
 int main() {
 
 	Nod* rad = NULL;
@@ -73,6 +157,16 @@ int main() {
 
 	printf("\nAfisare preordine:\n");
 	afisarePreordine(rad);
+
+	printf("\nProdus cautat:\n");
+	afisareProdus(getProdusByID(rad, 1));
+
+	printf("\nNr noduri: %d", determinaNumarNoduri(rad));
+	printf("\nInaltime: %d", calculeazaInaltimeArbore(rad));
+	printf("\nPret total: %.2f", calculeazaPretTotal(rad));
+	printf("\nPret categorie IT: %.2f", calculeazaPretCategorie(rad, "IT"));
+
+	dezalocareArbore(&rad);
 
 	return 0;
 }
