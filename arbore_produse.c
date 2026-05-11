@@ -18,16 +18,30 @@ struct Nod {
 };
 typedef struct Nod Nod;
 
-Produs initProdus(int id, float pret, const char* nume, const char* categorie) {
+Produs citireProdusDinFisier(FILE* file) {
+	char buffer[100];
+	char sep[3] = ",\n";
 	Produs p;
-	p.id = id;
-	p.pret = pret;
 
-	p.nume = (char*)malloc(strlen(nume) + 1);
-	strcpy(p.nume, nume);
+	if (fgets(buffer, 100, file) == NULL) {
+		p.id = -1;
+		return p;
+	}
 
-	p.categorie = (char*)malloc(strlen(categorie) + 1);
-	strcpy(p.categorie, categorie);
+	char* aux;
+
+	aux = strtok(buffer, sep);
+	p.id = atoi(aux);
+
+	p.pret = atof(strtok(NULL, sep));
+
+	aux = strtok(NULL, sep);
+	p.nume = (char*)malloc(strlen(aux) + 1);
+	strcpy(p.nume, aux);
+
+	aux = strtok(NULL, sep);
+	p.categorie = (char*)malloc(strlen(aux) + 1);
+	strcpy(p.categorie, aux);
 
 	return p;
 }
@@ -55,6 +69,22 @@ void adaugaProdusInArbore(Nod** rad, Produs pNou) {
 			adaugaProdusInArbore(&((*rad)->dr), pNou);
 		}
 	}
+}
+
+Nod* citireArboreDinFisier(const char* numeFisier) {
+	Nod* rad = NULL;
+	FILE* f = fopen(numeFisier, "r");
+
+	if (f) {
+		while (1) {
+			Produs p = citireProdusDinFisier(f);
+			if (p.id == -1) break;
+			adaugaProdusInArbore(&rad, p);
+		}
+	}
+
+	fclose(f);
+	return rad;
 }
 
 void afisarePreordine(Nod* rad) {
@@ -149,17 +179,13 @@ void dezalocareArbore(Nod** rad) {
 
 int main() {
 
-	Nod* rad = NULL;
-
-	adaugaProdusInArbore(&rad, initProdus(2, 200, "Mouse", "IT"));
-	adaugaProdusInArbore(&rad, initProdus(1, 3500, "Laptop", "IT"));
-	adaugaProdusInArbore(&rad, initProdus(3, 5000, "Telefon", "Mobile"));
+	Nod* rad = citireArboreDinFisier("produse.txt");
 
 	printf("\nAfisare preordine:\n");
 	afisarePreordine(rad);
 
 	printf("\nProdus cautat:\n");
-	afisareProdus(getProdusByID(rad, 1));
+	afisareProdus(getProdusByID(rad, 2));
 
 	printf("\nNr noduri: %d", determinaNumarNoduri(rad));
 	printf("\nInaltime: %d", calculeazaInaltimeArbore(rad));

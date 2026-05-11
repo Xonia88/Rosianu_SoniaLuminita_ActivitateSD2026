@@ -1,0 +1,4 @@
+1,3500,Laptop,IT
+2,200,Mouse,IT
+3,5000,Telefon,Mobile
+4,1500,Monitor,IT
