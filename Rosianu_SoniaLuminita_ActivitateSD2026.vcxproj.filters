@@ -66,10 +66,16 @@
     <ClCompile Include="HashTable_Farmacii.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FarmacieABC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
     <Text Include="studenti.txt" />
+    <Text Include="medicamente.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

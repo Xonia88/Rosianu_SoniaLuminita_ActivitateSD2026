@@ -126,6 +126,7 @@
     <ClCompile Include="angajati_stiva_coada.c" />
     <ClCompile Include="arbore_produse.c" />
     <ClCompile Include="arbore_studenti.c" />
+    <ClCompile Include="FarmacieABC.c" />
     <ClCompile Include="graf_examen_dfs.c" />
     <ClCompile Include="graf_studenti_dfs.c" />
     <ClCompile Include="hashtable_angajati.c" />
@@ -142,6 +143,7 @@
     <ClCompile Include="TaskuriSuplimentare.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="medicamente.txt" />
     <Text Include="restaurante.txt" />
     <Text Include="studenti.txt" />
   </ItemGroup>
