@@ -1,0 +1,5 @@
+1,4,25000,BMW,Ion,A
+2,2,18000,Audi,Maria,B
+3,4,32000,Mercedes,Alex,C
+4,5,15000,Dacia,George,D
+5,3,27000,Skoda,Elena,E

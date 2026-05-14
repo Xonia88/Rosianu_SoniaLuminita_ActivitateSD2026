@@ -129,6 +129,7 @@
     <ClCompile Include="FarmacieABC.c" />
     <ClCompile Include="graf_examen_dfs.c" />
     <ClCompile Include="graf_studenti_dfs.c" />
+    <ClCompile Include="HashTableMasina.c" />
     <ClCompile Include="hashtable_angajati.c" />
     <ClCompile Include="HashTable_Comenzi.c" />
     <ClCompile Include="HashTable_Farmacii.c" />

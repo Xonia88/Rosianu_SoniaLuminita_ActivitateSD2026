@@ -69,6 +69,9 @@
     <ClCompile Include="FarmacieABC.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HashTableMasina.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
