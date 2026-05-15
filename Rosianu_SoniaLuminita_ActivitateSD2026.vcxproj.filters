@@ -72,6 +72,9 @@
     <ClCompile Include="HashTableMasina.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="exersarepentrulucrare.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
