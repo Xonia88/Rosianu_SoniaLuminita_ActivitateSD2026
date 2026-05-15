@@ -78,6 +78,9 @@
     <ClCompile Include="Film.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilmAVL.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="restaurante.txt" />
