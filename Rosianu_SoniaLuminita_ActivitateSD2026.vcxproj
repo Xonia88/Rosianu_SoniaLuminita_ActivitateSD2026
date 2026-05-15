@@ -128,6 +128,7 @@
     <ClCompile Include="arbore_studenti.c" />
     <ClCompile Include="exersarepentrulucrare.c" />
     <ClCompile Include="FarmacieABC.c" />
+    <ClCompile Include="Film.c" />
     <ClCompile Include="graf_examen_dfs.c" />
     <ClCompile Include="graf_studenti_dfs.c" />
     <ClCompile Include="HashTableMasina.c" />
